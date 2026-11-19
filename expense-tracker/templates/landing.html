@@ -2,66 +2,119 @@
 
 {% block title %}Spendly — Track Every Rupee{% endblock %}
 
+{% block head %}
+<style>
+    .video-modal {
+        width: min(880px, calc(100vw - 32px));
+        max-width: none;
+        margin: auto; /* re-center: the global reset in style.css sets margin: 0 */
+        padding: 0;
+        border: none;
+        border-radius: var(--radius-md);
+        background: var(--ink);
+        overflow: visible;
+    }
+    .video-modal::backdrop {
+        background: rgba(15, 15, 15, 0.75);
+    }
+    .video-modal-frame {
+        position: relative;
+        aspect-ratio: 16 / 9;
+    }
+    .video-modal-frame iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: var(--radius-md);
+    }
+    .video-modal-close {
+        position: absolute;
+        top: -44px;
+        right: 0;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 50%;
+        background: var(--paper-card);
+        color: var(--ink);
+        font-size: 1.4rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .video-modal-close:hover { background: var(--paper-warm); }
+    .video-modal-close:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <section class="hero">
     <div class="hero-inner">
-        <div class="hero-badge">Personal Finance Tracker</div>
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Free to use · No credit card needed
+        </div>
         <h1 class="hero-title">
-            Know where your<br>
-            <em>money goes</em>
+            Track every rupee.<br>
+            <span class="hero-title-accent">Know where it goes.</span>
         </h1>
         <p class="hero-subtitle">
-            Log expenses, understand your spending patterns,
-            and take control of your financial life —
-            one transaction at a time.
+            Spendly helps you log expenses, spot patterns, and stay
+            on budget — without the spreadsheet headache.
         </p>
         <div class="hero-actions">
-            <a href="{{ url_for('register') }}" class="btn-primary">Start tracking free</a>
-            <a href="{{ url_for('login') }}" class="btn-ghost">Sign in</a>
+            <a href="{{ url_for('register') }}" class="btn-primary btn-lg">Create free account</a>
+            <a href="#how-it-works" class="btn-primary btn-lg">See how it works</a>
         </div>
     </div>
-    <div class="hero-visual">
-        <div class="mock-card">
-            <div class="mock-card-header">
-                <span class="mock-label">March 2026</span>
-                <span class="mock-total">₹12,450</span>
+
+    <div class="hero-visual" aria-hidden="true">
+        <div class="mock-window">
+            <div class="mock-window-bar">
+                <span class="mock-dot mock-dot-red"></span>
+                <span class="mock-dot mock-dot-yellow"></span>
+                <span class="mock-dot mock-dot-green"></span>
             </div>
-            <div class="mock-bars">
-                <div class="mock-bar-row">
-                    <span class="mock-cat">Bills</span>
-                    <div class="mock-bar-track">
-                        <div class="mock-bar" style="width: 72%"></div>
+            <div class="mock-window-body">
+                <div class="mock-stats">
+                    <div class="mock-stat">
+                        <span class="mock-stat-label">This month</span>
+                        <span class="mock-stat-value">₹18,240</span>
+                        <span class="mock-stat-note mock-note-up">+12% vs last</span>
                     </div>
-                    <span class="mock-amt">₹4,500</span>
+                    <div class="mock-stat">
+                        <span class="mock-stat-label">Budget left</span>
+                        <span class="mock-stat-value">₹6,760</span>
+                        <span class="mock-stat-note mock-note-good">43% remaining</span>
+                    </div>
+                    <div class="mock-stat">
+                        <span class="mock-stat-label">Transactions</span>
+                        <span class="mock-stat-value">34</span>
+                        <span class="mock-stat-note">this month</span>
+                    </div>
                 </div>
-                <div class="mock-bar-row">
-                    <span class="mock-cat">Food</span>
-                    <div class="mock-bar-track">
-                        <div class="mock-bar mock-bar-2" style="width: 52%"></div>
+                <div class="mock-breakdown">
+                    <div class="mock-bar-row">
+                        <span class="mock-cat">Food</span>
+                        <div class="mock-bar-track"><div class="mock-bar mock-bar-food" style="width: 74%"></div></div>
                     </div>
-                    <span class="mock-amt">₹3,200</span>
-                </div>
-                <div class="mock-bar-row">
-                    <span class="mock-cat">Health</span>
-                    <div class="mock-bar-track">
-                        <div class="mock-bar mock-bar-3" style="width: 33%"></div>
+                    <div class="mock-bar-row">
+                        <span class="mock-cat">Travel</span>
+                        <div class="mock-bar-track"><div class="mock-bar mock-bar-travel" style="width: 48%"></div></div>
                     </div>
-                    <span class="mock-amt">₹2,050</span>
-                </div>
-                <div class="mock-bar-row">
-                    <span class="mock-cat">Transport</span>
-                    <div class="mock-bar-track">
-                        <div class="mock-bar mock-bar-4" style="width: 28%"></div>
+                    <div class="mock-bar-row">
+                        <span class="mock-cat">Bills</span>
+                        <div class="mock-bar-track"><div class="mock-bar mock-bar-bills" style="width: 38%"></div></div>
                     </div>
-                    <span class="mock-amt">₹1,800</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="features">
+<section class="features" id="how-it-works">
     <div class="features-inner">
         <div class="feature-card">
             <div class="feature-icon">₹</div>
@@ -89,4 +142,55 @@
     </div>
 </section>
 
+<dialog class="video-modal" id="video-modal" aria-label="How Spendly works">
+    <div class="video-modal-frame">
+        <button type="button" class="video-modal-close" aria-label="Close video">&times;</button>
+        <!-- iframe is injected on open and removed on close so playback stops -->
+    </div>
+</dialog>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    // Placeholder video — replace with your own YouTube video ID.
+    var VIDEO_ID = "M7lc1UVf-VE";
+
+    var trigger = document.querySelector('.hero-actions a[href="#how-it-works"]');
+    var modal = document.getElementById("video-modal");
+    if (!trigger || !modal || typeof modal.showModal !== "function") return;
+
+    var frame = modal.querySelector(".video-modal-frame");
+    var closeBtn = modal.querySelector(".video-modal-close");
+
+    function openModal(e) {
+        e.preventDefault();
+        var iframe = document.createElement("iframe");
+        iframe.src = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?autoplay=1&rel=0";
+        iframe.title = "How Spendly works";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        frame.appendChild(iframe);
+        modal.showModal();
+    }
+
+    // Runs on every way of closing (button, backdrop click, Escape key):
+    // removing the iframe stops the video completely.
+    modal.addEventListener("close", function () {
+        var iframe = frame.querySelector("iframe");
+        if (iframe) iframe.remove();
+        trigger.focus();
+    });
+
+    trigger.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", function () { modal.close(); });
+
+    // A click on the dialog element itself (not its content) means the backdrop was clicked.
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal) modal.close();
+    });
+})();
+</script>
 {% endblock %}
